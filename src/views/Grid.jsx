@@ -1,8 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component , useState , useEffect , useCallback} from 'react';
 
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
+import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+
+
 import {myJson} from '../views/csv/jsonData'
 import Grid from '@material-ui/core/Grid';
 import Icon from '@material-ui/core/Icon';
@@ -14,13 +17,10 @@ import {MuiPickersUtilsProvider,KeyboardDatePicker} from '@material-ui/pickers';
 import DateFnsUtils from "@date-io/date-fns";
 
 
-class GridView extends Component {
+function GridView(props) {
 
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      columnDefs: [{
+    const[coulumnDefs,setColumnDefs] = useState([{
         headerName: "Store ID", field: "STORE_ID",sortable: true, filter: true , editable : true, checkboxSelection: true, headerCheckboxSelection: true
       }, {
         headerName: "Store Country", field: "STORE_COUNTRY",sortable: true, filter: true ,  editable : true
@@ -38,38 +38,44 @@ class GridView extends Component {
         headerName: "Discount", field: "DISCOUNT",sortable: true, filter: true ,  editable : true
       }, {
         headerName: "Date", field: "Date",sortable: true, filter: true ,  editable : true
-      }],
-    //   rowData: [{
-    //     make: "Toyota", model: "Celica", price: 35000
-    //   }, {
-    //     make: "Ford", model: "Mondeo", price: 32000
-    //   }, {
-    //     make: "Porsche", model: "Boxter", price: 72000
-    //   }]
-    rowData : null,
-    selectedDate : new Date('2014-08-18T21:11:54') 
-    }
-  }
+      }]);
 
-  componentDidMount()
+    const[rowData,setRowData] = useState(null)
+    const[dateSelected,setDateSelected] =  useState(new Date()) 
+    const [gridApi, setGridApi] = useState();
+
+    const onGridReady = useCallback(
+        (params) => {
+          const { api, columnApi } = params;
+          setGridApi({ api, columnApi });
+        },
+        []
+      );
+  
+  
+  
+useEffect(() => 
   {
-    this.setState(
+      setRowData(myJson);
+    /* this.setState(
       {
         rowData : myJson
       }
-    )
+    ) */
    
-    console.log(myJson);
+   
     //   console.log(json);
     //   fetch('https://raw.githubusercontent.com/ag-grid/ag-grid/master/grid-packages/ag-grid-docs/src/sample-data/rowData.json')
     //   .then(result => result.json())
     //   .then(rowData => this.setState({rowData}))
-  }
-   handleDateChange = (date) => {
-    this.setState({selectedDate : date});
+}, []);
+
+  const handleDateChange = (dateSelected) => {
+   /*  this.setState({selectedDate : date}); */
+   setDateSelected(dateSelected);
   };
 
-  render() {
+
     return (
       <div style={{ width: '96%' , marginTop : "1%" , marginLeft:"2%" }}>
         <Grid container spacing={1}>
@@ -85,8 +91,8 @@ class GridView extends Component {
           id="date-picker-inline"
           label="Date picker"
           size="small"
-          value={this.state.selectedDate}
-          onChange={this.handleDateChange}
+          value={dateSelected}
+          onChange={handleDateChange}
           KeyboardButtonProps={{
             'aria-label': 'change date',
           }}
@@ -116,7 +122,7 @@ class GridView extends Component {
       </Grid>
         <Grid item xs={12}>
       <div
-        className="ag-theme-material"
+        className="ag-theme-alpine"
         style={{
         /* marginLeft : '30px', */
         marginTop: '10px',
@@ -126,12 +132,12 @@ class GridView extends Component {
         <AgGridReact
          // 
          
-          onGridReady={ params => this.gridApi = params.api }
-          columnDefs={this.state.columnDefs}
+          onGridReady={ onGridReady}
+          columnDefs={coulumnDefs}
          // paginationAutoPageSize={true}
           pagination={true}
           rowSelection={"multiple"}
-          rowData={this.state.rowData}
+          rowData={rowData}
           paginationPageSize={20}
           >
         </AgGridReact>
@@ -141,6 +147,6 @@ class GridView extends Component {
       </div>
     );
   }
-}
+
 
 export default GridView;

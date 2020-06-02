@@ -19,6 +19,8 @@ import AssessmentIcon from '@material-ui/icons/Assessment';
 
 import Home from "../views/Home";
 import Grid from "../views/Grid";
+import InputForm from "../views/InputForm";
+//import Grid from "../views/Sample"
 
 const drawerWidth = 240;
 const history = createBrowserHistory();
@@ -90,6 +92,13 @@ const MyDrawer = withStyles(styles)(
           <ListItemText primary={"Store Transactions"} />
          
         </ListItem>
+
+        
+        <ListItem button component={Link} to="/Add Records" onClick={onItemClick('Add Records')}>
+        <ListItemIcon>{ <AssessmentIcon /> }</ListItemIcon>
+        
+          <ListItemText>Add Records</ListItemText>
+        </ListItem>
        {/*  <ListItem button component={Link} to="/add" onClick={onItemClick('Add Record')}>
         <ListItemIcon>{ <AssessmentIcon /> }</ListItemIcon>
         
@@ -100,14 +109,16 @@ const MyDrawer = withStyles(styles)(
         
           <ListItemText>Reports</ListItemText>
         </ListItem>
+
        
       </List>
     </Drawer>
     <main className={classes.content}>
         <Route exact path="/" component={Grid} />
+        <Route path="/Add Records" component={InputForm} />
         <Route path="/reports" component={Home} />
        
-        <Route path="/Add Record" component={Home} />
+        
     </main>
     </Router>
   )
