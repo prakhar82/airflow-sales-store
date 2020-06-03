@@ -23,7 +23,7 @@ import InputForm from "../views/InputForm";
 //import Grid from "../views/Sample"
 
 const drawerWidth = 240;
-const history = createBrowserHistory();
+const history = createBrowserHistory({ basename: '/react' });
 
 const styles = theme => ({
   root: {
@@ -75,7 +75,7 @@ const MyToolbar = withStyles(styles)(
 
 const MyDrawer = withStyles(styles)(
   ({ classes, variant, open, onClose, onItemClick }) => (
-    <Router history={history}>
+    <Router  history={history} >
     <Drawer variant={variant} open={open} onClose={onClose}
                 classes={{
                   paper: classes.drawerPaper

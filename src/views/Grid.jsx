@@ -37,7 +37,7 @@ function GridView(props) {
       }, {
         headerName: "Discount", field: "DISCOUNT",sortable: true, filter: true ,  editable : true
       }, {
-        headerName: "Date", field: "Date",sortable: true, filter: true ,  editable : true
+        headerName: "Date", field: "Date",sortable: true,  filter: 'agSetColumnFilter' ,  editable : true
       }]);
 
     const[rowData,setRowData] = useState(null)

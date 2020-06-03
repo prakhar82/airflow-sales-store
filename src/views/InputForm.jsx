@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import {MuiPickersUtilsProvider,KeyboardDatePicker} from '@material-ui/pickers';
+import DateFnsUtils from "@date-io/date-fns";
 
 import { FormControl ,InputAdornment } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -66,6 +68,7 @@ const currencies = [
   const [costPrice , setCostPrice] = React.useState("");
   const [discount , setDiscount] = React.useState("");
   const [sellingPrice , setSellingPrice] = React.useState("");
+  const[dateSelected,setDateSelected] =  React.useState(new Date()); 
 
   const [currency, setCurrency] = React.useState('USD');
   
@@ -115,27 +118,65 @@ const currencies = [
     event.preventDefault();
     if(storeId.length===0)
     {
-      setErrorStoreId("Store ID Can not be blank");
+      setErrorStoreId("Store ID can not be blank!");
+    }
+    else{
+      setErrorStoreId("");
+    }
+    if(storeLocation.length===0)
+    {
+      setErrorStoreLocation("Store Location can not be blank!");
+    }
+    else{
+      setErrorStoreLocation("");
+    }
+    if(productCategory.length===0)
+    {
+      setErrorProductCategory("Product Category can not be blank!");
+    }
+    else{
+      setErrorProductCategory("");
+    }
+    if(productId.length===0)
+    {
+      setErrorProductId("Product ID Can not be blank");
+    }
+    else{
+      setErrorProductId("");
+    }
+    if(retailPrice.length===0)
+    {
+      setErrorRetailPrice("MRP Can not be blank");
+    }
+    else{
+      setErrorRetailPrice("");
+    }
+    if(costPrice.length===0)
+    {
+      setErrorCostPrice("Cost Price can not be blank");
+    }
+    else{
+      setErrorCostPrice("");
+    }
+    if(sellingPrice.length===0)
+    {
+      setErrorSellingPrice("Selling Price can not be blank");
+    }
+    else{
+      setErrorSellingPrice("");
+    }
+    if(discount.length===0)
+    {
+      setErrorDiscount("Discount can not be blank");
+    }
+    else{
+      setErrorDiscount("");
     }
   }
-  /* const actions = [
-    <Button
-      type="reset"
-      label="Reset"
-      secondary={true}
-      style={{ float: 'left' }}
-      />,
-    <Button
-      label="Cancel"
-      primary={true}
-     // onClick={this.handleClose}
-      />,
-    <Button
-      type="submit"
-      label="Submit"
-      primary={true}
-      />,
-  ]; */
+  const handleDateChange = (dateSelected) => {
+    /*  this.setState({selectedDate : date}); */
+    setDateSelected(dateSelected);
+  }
 
   return (
       
@@ -180,6 +221,7 @@ const currencies = [
         id="storeLocation"
         freeSolo
         options={storeLocationMap.map((option) => option.title)}
+        onChange={handleChangeStoreLocation}
         renderInput={(params) => (
           <TextField {...params} 
           label="Store Location" 
@@ -194,6 +236,7 @@ const currencies = [
         id="productCategory"
         freeSolo
         options={productCategoryMap.map((option) => option.title)}
+        onChange={handleChangeProductCategory}
         renderInput={(params) => (
           <TextField {...params}
            label="Product Category"
@@ -221,7 +264,7 @@ const currencies = [
       <TextField
           
           id="retailPrice"
-          label="MRP (Maximum Retail Price)"
+          label="MRP"
           type="number"
           defaultValue=""
           error={!!errorRetailPrice}
@@ -275,6 +318,24 @@ const currencies = [
           }}
          
         />
+      </div>
+      <div>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <KeyboardDatePicker
+          disableToolbar
+          variant="inline"
+          format="MM/dd/yyyy"
+          margin="normal"
+          id="date-picker-inline"
+          label="Date"
+          size="small"
+          value={dateSelected}
+          onChange={handleDateChange}
+          KeyboardButtonProps={{
+            'aria-label': 'change date',
+          }}
+        />
+        </MuiPickersUtilsProvider>
       </div>
      <input type = "submit" value = "Submit"/>
    
