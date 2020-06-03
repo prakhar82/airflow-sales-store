@@ -3,6 +3,23 @@ Application which feed data to airflow in csv, and showing processed data by air
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+
+### For Deployment 
+
+In the project directory, you can run:
+
+### `npm install`
+
+### `npm run build`
+
+Builds the app for production to the `build` folder. Home page set as /react<br />
+Copy contents of build folder to folder called "react" and save it to the webapps folder of tomcat<br/>
+Add "WEB-INF" folder to "react" folder ( Available in deployment folder of Repository <br/>
+The application now accessible using URL  -->  localhost:8080/react 
+
+
+
+
 ## Available Scripts
 
 In the project directory, you can run:
