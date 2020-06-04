@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment , useRef } from 'react';
 import clsx from 'clsx';
 import { Router, Route, Link } from "react-router-dom";
 import { createBrowserHistory } from "history";
@@ -18,8 +18,8 @@ import StorageIcon from '@material-ui/icons/Storage';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 
 import Home from "../views/Home";
-import Grid from "../views/Grid";
-import InputForm from "../views/InputForm";
+import {GridView} from "../views/Grid";
+import {InputForm}  from "../views/InputForm";
 //import Grid from "../views/Sample"
 
 const drawerWidth = 240;
@@ -45,6 +45,8 @@ const styles = theme => ({
     zIndex: theme.zIndex.drawer + 1
   }
 });
+
+
 
 const MyToolbar = withStyles(styles)(
   ({ classes, title, onMenuClick }) => (
@@ -74,7 +76,8 @@ const MyToolbar = withStyles(styles)(
 );
 
 const MyDrawer = withStyles(styles)(
-  ({ classes, variant, open, onClose, onItemClick }) => (
+ 
+  ({ classes, variant, open, onClose, onItemClick , updateRowData , newRecordsList }) => (
     <Router  history={history} >
     <Drawer variant={variant} open={open} onClose={onClose}
                 classes={{
@@ -113,9 +116,10 @@ const MyDrawer = withStyles(styles)(
        
       </List>
     </Drawer>
+  
     <main className={classes.content}>
-        <Route exact path="/" component={Grid} />
-        <Route path="/Add Records" component={InputForm} />
+        <Route exact path="/" render={(props) => <GridView newRecordsList = {newRecordsList} />} />
+        <Route path="/Add Records"  render={(props) => <InputForm updateRowData = {updateRowData} />} />
         <Route path="/reports" component={Home} />
        
         
@@ -125,18 +129,32 @@ const MyDrawer = withStyles(styles)(
 );
 
 function AppBarInteraction({ classes, variant }) {
+
   const [drawer, setDrawer] = useState(false);
   const [title, setTitle] = useState('Store Transactions');
-
+  const [newRecordsList, setNewRecordsList] = useState([{}])
+ 
   const toggleDrawer = () => {
     setDrawer(!drawer);
   };
+
+  const updateRowData = newRowNode => {
+
+    console.log(newRowNode);
+    setNewRecordsList(newRecordsList => [...newRecordsList, newRowNode])
+
+    console.log(newRecordsList)
+    
+    
+  }
 
   const onItemClick = title => () => {
     setTitle(title);
     setDrawer(variant === 'temporary' ? false : drawer);
     setDrawer(!drawer);
   };
+
+
 
   return (
     <div className={classes.root}>
@@ -146,6 +164,8 @@ function AppBarInteraction({ classes, variant }) {
         onClose={toggleDrawer}
         onItemClick={onItemClick}
         variant={variant}
+        updateRowData = {updateRowData}
+        newRecordsList = {newRecordsList}
       />
     </div>
   );

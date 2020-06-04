@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function InputForm() {
+export  const InputForm = (props) => {
 
   const storeLocationMap = [
     { title: 'New York'},
@@ -57,7 +57,7 @@ const currencies = [
   },
 ];
 
-
+  var isFormValid = true;
 
   const classes = useStyles();
   const [storeId , setStoreId] = React.useState("");
@@ -83,9 +83,9 @@ const currencies = [
  // const [errorStoreId , setErrorStoreId] = React.useState("");
 
 
-  const handleChangeLocation = (event) => {
-      console.log(event.target.value);
-  }
+  // const handleChangeLocation = (event) => {
+  //     console.log(event.target.value);
+  // }
   const handleChangeCurrency = (event) => {
     setCurrency(event.target.value);
   };
@@ -94,9 +94,17 @@ const currencies = [
   }
   const handleChangeStoreLocation = (event) => {
     setStoreLocation(event.target.value);
+    console.log(storeLocation);
+  }
+  const handleChangeStoreLocationAuto = (event,value) => {
+    setStoreLocation(value);
+    console.log(storeLocation);
   }
   const handleChangeProductCategory = (event) => {
     setProductCategory(event.target.value);
+  }
+  const handleChangeProductCategoryAuto = (event,value) => {
+    setProductCategory(value);
   }
   const handleChangeProductId = (event) => {
     setProductId(event.target.value);
@@ -113,74 +121,68 @@ const currencies = [
   const handleChangeSellingPrice = (event) => {
     setSellingPrice(event.target.value);
   }
+  let flag =0;
+  const invalidEntry = () => {
+      isFormValid = false;
 
+  }
   const mySubmitHandler = (event) => {
     event.preventDefault();
-    if(storeId.length===0)
-    {
-      setErrorStoreId("Store ID can not be blank!");
-    }
-    else{
-      setErrorStoreId("");
-    }
-    if(storeLocation.length===0)
-    {
-      setErrorStoreLocation("Store Location can not be blank!");
-    }
-    else{
-      setErrorStoreLocation("");
-    }
-    if(productCategory.length===0)
-    {
-      setErrorProductCategory("Product Category can not be blank!");
-    }
-    else{
-      setErrorProductCategory("");
-    }
-    if(productId.length===0)
-    {
-      setErrorProductId("Product ID Can not be blank");
-    }
-    else{
-      setErrorProductId("");
-    }
-    if(retailPrice.length===0)
-    {
-      setErrorRetailPrice("MRP Can not be blank");
-    }
-    else{
-      setErrorRetailPrice("");
-    }
-    if(costPrice.length===0)
-    {
-      setErrorCostPrice("Cost Price can not be blank");
-    }
-    else{
-      setErrorCostPrice("");
-    }
-    if(sellingPrice.length===0)
-    {
-      setErrorSellingPrice("Selling Price can not be blank");
-    }
-    else{
-      setErrorSellingPrice("");
-    }
-    if(discount.length===0)
-    {
-      setErrorDiscount("Discount can not be blank");
-    }
-    else{
-      setErrorDiscount("");
-    }
+   
+     
+  
+    setErrorStoreId(storeId.length === 0 ? ["Store ID can not be blank!", invalidEntry()] :"");
+  
+    setErrorStoreLocation(storeLocation.length===0 ? ["Store Location can not be blank!", invalidEntry()]:"");
+    
+    setErrorProductCategory(productCategory.length===0 ? ["Product Category can not be blank!", invalidEntry()]:"");
+    
+    setErrorProductId(productId.length===0 ? ["Product ID Can not be blank", invalidEntry()]:"");
+
+    setErrorRetailPrice(retailPrice.length===0 ? ["MRP Can not be blank", invalidEntry()]:"");
+    
+    setErrorCostPrice(costPrice.length===0 ? ["Cost Price can not be blank", invalidEntry()]:"");
+    
+    setErrorSellingPrice(sellingPrice.length===0 ? ["Selling Price can not be blank", invalidEntry()] : "");
+    
+    setErrorDiscount(discount.length===0 ? ["Discount can not be blank", invalidEntry()] : "");
+
+   if(isFormValid)
+   {
+     
+    props.updateRowData(createNewRowData())
+    document.getElementById("create-course-form").reset();
+    setStoreLocation("");
+    setProductCategory("");
+   }
+   
+      
+  
+    
   }
   const handleDateChange = (dateSelected) => {
     /*  this.setState({selectedDate : date}); */
     setDateSelected(dateSelected);
   }
 
+  const createNewRowData = () =>{
+    var newData = {
+      "STORE_ID": storeId,
+      "STORE_COUNTRY": currency,
+      "STORE_LOCATION": storeLocation,
+      "PRODUCT_CATEGORY": productCategory,
+      "PRODUCT_ID": productId,
+      "CP": currency+" "+costPrice,
+      "DISCOUNT": currency+" "+discount,
+      "SP": currency+" "+ costPrice,
+      "Date": dateSelected
+    };
+    return newData;
+  }
+
   return (
       
-    <form onSubmit={mySubmitHandler} className={classes.root} noValidate  autoComplete="off">
+    <form  id="create-course-form" onSubmit={mySubmitHandler} className={classes.root} noValidate  autoComplete="off">
         
    
       <div>
@@ -194,6 +196,7 @@ const currencies = [
           error={!!errorStoreId}
           helperText= {errorStoreId}
           onChange={handleChangeStoreId}
+          
          
         //  error = {true}
           
@@ -215,18 +218,40 @@ const currencies = [
             </MenuItem>
           ))}
         </TextField>
+
+       
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <KeyboardDatePicker
+          disableToolbar
+          variant="inline"
+          format="MM/dd/yyyy"
+          disabled = "true"
+          margin="normal"
+          id="date-picker-inline"
+          label="Date"
+          size="small"
+          value={dateSelected}
+          onChange={handleDateChange}
+          KeyboardButtonProps={{
+            'aria-label': 'change date',
+          }}
+        />
+        </MuiPickersUtilsProvider>
+      
       </div>
       <div>
       <Autocomplete
         id="storeLocation"
         freeSolo
         options={storeLocationMap.map((option) => option.title)}
-        onChange={handleChangeStoreLocation}
+        value={storeLocation}
+        onInputChange={handleChangeStoreLocationAuto}
         renderInput={(params) => (
           <TextField {...params} 
           label="Store Location" 
           margin="normal" 
-         
+          placeholder="New York"
+          value={storeLocation}
           error={!!errorStoreLocation}
           helperText= {errorStoreLocation}
           onChange={handleChangeStoreLocation}  />
@@ -236,11 +261,14 @@ const currencies = [
         id="productCategory"
         freeSolo
         options={productCategoryMap.map((option) => option.title)}
-        onChange={handleChangeProductCategory}
+        value={productCategory}
+        onInputChange={handleChangeProductCategoryAuto}
         renderInput={(params) => (
           <TextField {...params}
            label="Product Category"
            margin="normal"
+           placeholder="Electronics"
+           value={productCategory}
            error={!!errorProductCategory}
            helperText= {errorProductCategory}
            onChange={handleChangeProductCategory} />
@@ -319,24 +347,7 @@ const currencies = [
          
         />
       </div>
-      <div>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
-          disableToolbar
-          variant="inline"
-          format="MM/dd/yyyy"
-          margin="normal"
-          id="date-picker-inline"
-          label="Date"
-          size="small"
-          value={dateSelected}
-          onChange={handleDateChange}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
-        />
-        </MuiPickersUtilsProvider>
-      </div>
+     
      <input type = "submit" value = "Submit"/>
    
     </form>

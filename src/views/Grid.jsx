@@ -1,4 +1,4 @@
-import React, { Component , useState , useEffect , useCallback} from 'react';
+import React, { Component , useState , useEffect , useCallback , forwardRef, useRef, useImperativeHandle } from 'react';
 
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -16,8 +16,8 @@ import Button from '@material-ui/core/Button';
 import {MuiPickersUtilsProvider,KeyboardDatePicker} from '@material-ui/pickers';
 import DateFnsUtils from "@date-io/date-fns";
 
+export const GridView = forwardRef((props, ref) => {
 
-function GridView(props) {
 
 
     const[coulumnDefs,setColumnDefs] = useState([{
@@ -51,8 +51,8 @@ function GridView(props) {
         },
         []
       );
-  
-  
+ 
+    
   
 useEffect(() => 
   {
@@ -69,6 +69,15 @@ useEffect(() =>
     //   .then(result => result.json())
     //   .then(rowData => this.setState({rowData}))
 }, []);
+
+useEffect(() => {
+  if(gridApi)
+  {
+    console.log(gridApi);
+    var res = gridApi.api.applyTransaction({ add: props.newRecordsList });
+   console.log("Update row node result!!!!!!!!!!! "+res);
+}
+},[props.newRecordsList  , gridApi])
 
   const handleDateChange = (dateSelected) => {
    /*  this.setState({selectedDate : date}); */
@@ -146,7 +155,4 @@ useEffect(() =>
      
       </div>
     );
-  }
-
-
-export default GridView;
+  });
