@@ -5,6 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import {MuiPickersUtilsProvider,KeyboardDatePicker} from '@material-ui/pickers';
 import DateFnsUtils from "@date-io/date-fns";
+import {  format } from 'date-fns'
 
 import { FormControl ,InputAdornment } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -68,7 +69,7 @@ const currencies = [
   const [costPrice , setCostPrice] = React.useState("");
   const [discount , setDiscount] = React.useState("");
   const [sellingPrice , setSellingPrice] = React.useState("");
-  const[dateSelected,setDateSelected] =  React.useState(new Date()); 
+  const[dateSelected,setDateSelected] =  React.useState(format(new Date(),'dd/MM/yyyy')); 
 
   const [currency, setCurrency] = React.useState('USD');
   

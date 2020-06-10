@@ -1,9 +1,13 @@
 import React, { Component , useState , useEffect , useCallback , forwardRef, useRef, useImperativeHandle } from 'react';
 
+
 import { AgGridReact } from 'ag-grid-react';
+
+import 'ag-grid-enterprise';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+
 
 
 import {myJson} from '../views/csv/jsonData'
@@ -16,12 +20,18 @@ import Button from '@material-ui/core/Button';
 import {MuiPickersUtilsProvider,KeyboardDatePicker} from '@material-ui/pickers';
 import DateFnsUtils from "@date-io/date-fns";
 
+//import 'ag-grid-enterprise';
+
 export const GridView = forwardRef((props, ref) => {
 
 
 
-    const[coulumnDefs,setColumnDefs] = useState([{
-        headerName: "Store ID", field: "STORE_ID",sortable: true, filter: true , editable : true, checkboxSelection: true, headerCheckboxSelection: true
+    const[coulumnDefs,setColumnDefs] = useState([
+      {
+         checkboxSelection: true, headerCheckboxSelection: true , headerName: "Date", field: "Date",sortable: true,sort: 'desc',  filter: true ,  editable : true
+      },
+      {
+        headerName: "Store ID", field: "STORE_ID",sortable: true, filter: true , editable : true
       }, {
         headerName: "Store Country", field: "STORE_COUNTRY",sortable: true, filter: true ,  editable : true
       }, {
@@ -36,8 +46,6 @@ export const GridView = forwardRef((props, ref) => {
         headerName: "Cost Price", field: "CP",sortable: true, filter: true ,  editable : true
       }, {
         headerName: "Discount", field: "DISCOUNT",sortable: true, filter: true ,  editable : true
-      }, {
-        headerName: "Date", field: "Date",sortable: true,  filter: 'agSetColumnFilter' ,  editable : true
       }]);
 
     const[rowData,setRowData] = useState(null)
@@ -75,7 +83,7 @@ useEffect(() => {
   {
     console.log(gridApi);
     var res = gridApi.api.applyTransaction({ add: props.newRecordsList });
-   console.log("Update row node result!!!!!!!!!!! "+res);
+   console.log("Update row node result!!!!!!!!!!! "+JSON.stringify(props.newRecordsList));
 }
 },[props.newRecordsList  , gridApi])
 
@@ -91,7 +99,7 @@ useEffect(() => {
           
             
             <Grid item xs = {9}>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          {/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <KeyboardDatePicker
           disableToolbar
           variant="inline"
@@ -106,7 +114,7 @@ useEffect(() => {
             'aria-label': 'change date',
           }}
         />
-        </MuiPickersUtilsProvider>
+        </MuiPickersUtilsProvider> */}
 
           </Grid>
           <Grid item xs={2}>

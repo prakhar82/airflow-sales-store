@@ -132,7 +132,7 @@ function AppBarInteraction({ classes, variant }) {
 
   const [drawer, setDrawer] = useState(false);
   const [title, setTitle] = useState('Store Transactions');
-  const [newRecordsList, setNewRecordsList] = useState([{}])
+  const [newRecordsList, setNewRecordsList] = useState([])
  
   const toggleDrawer = () => {
     setDrawer(!drawer);
@@ -141,9 +141,14 @@ function AppBarInteraction({ classes, variant }) {
   const updateRowData = newRowNode => {
 
     console.log(newRowNode);
-    setNewRecordsList(newRecordsList => [...newRecordsList, newRowNode])
+    var list = newRecordsList
+    list.push(newRowNode)
+    
+    //setNewRecordsList(newRecordsList => [...newRecordsList, newRowNode])
+    setNewRecordsList(list)
 
-    console.log(newRecordsList)
+    console.log(list)
+    //console.log(newRecordsList)
     
     
   }
