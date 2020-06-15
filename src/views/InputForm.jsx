@@ -6,9 +6,16 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import {MuiPickersUtilsProvider,KeyboardDatePicker} from '@material-ui/pickers';
 import DateFnsUtils from "@date-io/date-fns";
 import {  format } from 'date-fns'
+import { useHistory } from "react-router-dom";
 
 import { FormControl ,InputAdornment } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
+
+import SaveIcon from '@material-ui/icons/Save';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import DeleteIcon from '@material-ui/icons/Delete';
+
 
 
 
@@ -18,7 +25,14 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
       width: '25ch',
       marginLeft : '50px',
-      marginTop : '50px'
+      marginTop : '30px'
+    },
+    
+      '& .MuiButton-root': {
+        margin: theme.spacing(1),
+        width: '15ch',
+        marginLeft : '50px',
+        marginTop : '50px'
     },
   },
 }));
@@ -60,6 +74,7 @@ const currencies = [
 
   var isFormValid = true;
 
+
   const classes = useStyles();
   const [storeId , setStoreId] = React.useState("");
   const [storeLocation , setStoreLocation] = React.useState("");
@@ -69,7 +84,7 @@ const currencies = [
   const [costPrice , setCostPrice] = React.useState("");
   const [discount , setDiscount] = React.useState("");
   const [sellingPrice , setSellingPrice] = React.useState("");
-  const[dateSelected,setDateSelected] =  React.useState(format(new Date(),'dd/MM/yyyy')); 
+  const[dateSelected,setDateSelected] =  React.useState(format(new Date(),'MM/dd/yyyy')); 
 
   const [currency, setCurrency] = React.useState('USD');
   
@@ -127,6 +142,7 @@ const currencies = [
       isFormValid = false;
 
   }
+
   const mySubmitHandler = (event) => {
     event.preventDefault();
    
@@ -153,8 +169,8 @@ const currencies = [
      
     props.updateRowData(createNewRowData())
     document.getElementById("create-course-form").reset();
-    setStoreLocation("");
-    setProductCategory("");
+    // setStoreLocation("");
+    // setProductCategory("");
    }
    
       
@@ -165,6 +181,7 @@ const currencies = [
     /*  this.setState({selectedDate : date}); */
     setDateSelected(dateSelected);
   }
+
 
   const createNewRowData = () =>{
     var newData = {
@@ -203,22 +220,22 @@ const currencies = [
           
          
         />
+
+<TextField
+          
+          id="productId"
+          label="Product ID"
+          defaultValue=""
+          placeholder="12254943"
+          error={!!errorProductId}
+          helperText= {errorProductId}
+          onChange={handleChangeProductId} 
+
+          
+         
+        />
         
-       <TextField
-          id="storeCurrency"
-          select
-          label="Country"
-          value={currency}
-          onChange={handleChangeCurrency}
-          helperText="Please select your currency"
-    
-        >
-          {currencies.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
+      
 
        
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -241,6 +258,21 @@ const currencies = [
       
       </div>
       <div>
+      <TextField
+          id="storeCurrency"
+          select
+          label="Country"
+          value={currency}
+          onChange={handleChangeCurrency}
+          helperText="Please select your currency"
+    
+        >
+          {currencies.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </TextField>
       <Autocomplete
         id="storeLocation"
         freeSolo
@@ -275,19 +307,7 @@ const currencies = [
            onChange={handleChangeProductCategory} />
         )}
       />
-       <TextField
-          
-          id="productId"
-          label="Product ID"
-          defaultValue=""
-          placeholder="12254943"
-          error={!!errorProductId}
-          helperText= {errorProductId}
-          onChange={handleChangeProductId} 
-
-          
-         
-        />
+      
       </div>
       <div>
       <TextField
@@ -349,7 +369,27 @@ const currencies = [
         />
       </div>
      
-     <input type = "submit" value = "Submit"/>
+     {/* <input type = "submit" value = "Submit"/> */}
+     <div>
+     
+     <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            //className={classes.button}
+            startIcon={<SaveIcon />}
+          >Submit
+      </Button>
+      <Button
+            variant="contained"
+            color="primary"
+            type="reset"
+            //className={classes.button}
+           // startIcon={<CloudUploadIcon />}
+           startIcon={<DeleteIcon />}
+          >Reset
+      </Button>
+      </div>
    
     </form>
   );
